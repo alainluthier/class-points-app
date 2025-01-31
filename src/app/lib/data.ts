@@ -2,16 +2,23 @@ import { sql } from '@vercel/postgres';
 import { Attendance, Balance, FechaDB } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
+function convert(fec: Date){
+  const fecha=new Date(fec.getFullYear(),fec.getMonth(),fec.getDate(),0,0,0,0)
+  return(new Date(fecha.toLocaleDateString('en',{timeZone:'America/La_Paz'})))
+}
 export async function fetchDates(){
     noStore();
     try{
         const data = await sql<FechaDB> `
-select "date" AT TIME ZONE 'America/La_Paz' "date", periodo
+select "date", periodo
 from bank.dates 
 --where date <= date(now())
 order by date desc
         `;
-        const listDates = data.rows;
+        const listDates = data.rows.map((fila)=>({
+          ...fila,
+          date: convert(fila.date)
+        }));
         console.log(listDates);
         return listDates;
     } catch(error){

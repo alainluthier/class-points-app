@@ -1,5 +1,5 @@
 export type FechaDB = {
-    date: string;
+    date: Date;
     periodo: string;
 }
 

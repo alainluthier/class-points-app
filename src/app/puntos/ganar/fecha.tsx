@@ -39,8 +39,8 @@ export default function Fecha({ dates }: { dates: FechaDB[] }) {
 
                 {
                     dates.map((date) => (
-                        <option value={formatDateToLocal(date.date)} key={formatDateToLocal(date.date)}>
-                            {formatDateToLocal(date.date)}
+                        <option value={formatDateToLocal(date.date.toDateString())} key={formatDateToLocal(date.date.toDateString())}>
+                            {formatDateToLocal(date.date.toDateString())}
                         </option>
                     ))
                 }
