@@ -4,9 +4,11 @@ import Asistencia from './asistencia';
 export default async function InvoicesTable({
   barrio,
   fecha,
+  id_user,
 }: {
   barrio: string;
-  fecha: string;
+  fecha: number;
+  id_user: number;
 }) {
   const attendaces = await fetchAttendance(barrio, fecha);
   return (
@@ -24,7 +26,7 @@ export default async function InvoicesTable({
                     <div className="mb-2 flex items-center">
                       <p>{att.apellidos_nombres}</p>
                     </div>
-                    <Asistencia attendance={att} />
+                    <Asistencia attendance={att} id_user={id_user}/>
                   </div>
                 </div>
                 <div className="flex w-full items-center justify-between pt-2">
@@ -61,7 +63,7 @@ export default async function InvoicesTable({
                     {att.apellidos_nombres}
                   </td>
                   <td>
-                    <Asistencia attendance={att} />
+                    <Asistencia attendance={att} id_user={id_user}/>
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {att.total}

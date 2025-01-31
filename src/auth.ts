@@ -9,7 +9,7 @@ async function getUser(name: string,password: string): Promise<User | undefined>
   try {
     const user = await sql<User>`
     SELECT * FROM bank.user
-    where "user"=${name}
+    where name=${name}
     and password = ${password}
     `;
     return user.rows[0];

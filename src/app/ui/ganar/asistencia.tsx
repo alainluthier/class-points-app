@@ -3,7 +3,7 @@ import { Attendance } from "@/app/lib/definitions";
 import CheckStatus from "@/app/puntos/ganar/status";
 import { revalidatePath } from "next/cache";
 
-export default async function Asistencia({ attendance }: { attendance: Attendance; }) {
+export default async function Asistencia({ attendance, id_user }: { attendance: Attendance; id_user:number}) {
     const handleUpdate = async (data: FormData) => {
         "use server";
         const tipo = data.get("tipo");
@@ -35,13 +35,13 @@ export default async function Asistencia({ attendance }: { attendance: Attendanc
                 break;
         }
         updateAttendace(
-            1,
+            id_user,
             attendance.id_client,
             attendance.asistencia,
             attendance.puntualidad,
             attendance.escrituras,
             0,
-            attendance.date);
+            attendance.fecha_numero);
         revalidatePath('/puntos/ganar');
     };
     return (

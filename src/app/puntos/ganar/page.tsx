@@ -4,16 +4,18 @@ import { Suspense } from 'react';
 import Fecha from './fecha';
 import { fetchDates } from '@/app/lib/data';
 import Table from '@/app/ui/ganar/table';
-import { formatDateToLocal } from '@/app/lib/utils';
+import { fechaNumero} from '@/app/lib/utils';
+import { auth } from "@/auth";
 export default async function Page(props: {
   searchParams?: Promise<{
-    fecha?: string;
+    fecha?: number;
   }>;
 }) {
+    const hoy_numero = fechaNumero(new Date())
     const listDates = await fetchDates();
     const searchParams = await props.searchParams;
-    const fecha = searchParams?.fecha || formatDateToLocal(listDates[0].date.toISOString());
-    const barrio='16 de Julio'
+    const fecha = searchParams?.fecha || listDates[0].fecha_numero || hoy_numero;
+    const session = await auth();
     return (
         <div className="w-full">
           <div className="flex w-full items-center justify-between">
@@ -22,10 +24,10 @@ export default async function Page(props: {
             </h1>
           </div>
           <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-            <Fecha dates={listDates} />
+            <Fecha fechas={listDates} />
           </div>
            <Suspense key={fecha} fallback={<AsistenciaTableSkeleton />}>
-            <Table barrio={barrio} fecha={fecha} />
+            <Table barrio={session?.user?.ward||''} fecha={fecha} id_user={session?.user?.id_user||0}/>
           </Suspense>
         </div>
       );

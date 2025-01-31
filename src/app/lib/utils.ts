@@ -1,16 +1,19 @@
-export const formatDateToLocal = (
-    dateStr: string,
-    locale: string = 'en-US',
+export const formatDate = (
+    dateNumber: number,
+    locale: string = 'es-BO',
   ) => {
-    const date = new Date(dateStr);
+    const dateStr=dateNumber+''
+    const date = new Date(Number(dateStr.substring(0,4)),Number(dateStr.substring(4,6))-1,Number(dateStr.substring(6,8)));
     const options: Intl.DateTimeFormatOptions = {
+      weekday: 'short',
       day: 'numeric',
       month: 'short',
-      year: 'numeric',
+      timeZone: 'America/La_Paz',
     };
     const formatter = new Intl.DateTimeFormat(locale, options);
     return formatter.format(date);
   };
+
   export const generatePagination = (currentPage: number, totalPages: number) => {
     // If the total number of pages is 7 or less,
     // display all pages without any ellipsis.
@@ -43,3 +46,14 @@ export const formatDateToLocal = (
       totalPages,
     ];
   };
+  export function fechaNumero(fecha: Date) {
+
+    const map = {
+        dd: fecha.getDate(),
+        mm: fecha.getMonth() + 1,
+        yy: fecha.getFullYear().toString().slice(-2),
+        yyyy: fecha.getFullYear()
+    }
+
+    return Number(map.yyyy+map.mm+map.dd)
+}

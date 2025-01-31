@@ -1,7 +1,7 @@
 import { fetchFilteredExtracts } from "@/app/lib/data";
-import { formatDateToLocal } from "@/app/lib/utils";
 import { inter } from "@/app/ui/fonts";
 import Breadcrumbs from "../breadcrumbs";
+import { formatDate } from "@/app/lib/utils";
 export default async function ProcesosTable({
   tag,
   currentPage,
@@ -33,7 +33,7 @@ export default async function ProcesosTable({
           <div className="md:hidden">
             {forms.saldoLista?.map((form) => (
               <div
-                key={formatDateToLocal(form.date)}
+                key={form.fecha_numero}
                 className="w-full rounded-md bg-white p-4"
               >
                 <div className="flex w-full items-center justify-between">
@@ -45,7 +45,7 @@ export default async function ProcesosTable({
                   </div>
                 </div>
                 <div className="flex items-center justify-between border-b pb-2 pt-2">
-                  <p>{formatDateToLocal(form.date)}</p>
+                  <p>{formatDate(form.fecha_numero)}</p>
                 </div>
               </div>
             ))}
@@ -67,11 +67,11 @@ export default async function ProcesosTable({
             <tbody className="bg-white">
               {forms.saldoLista?.map((form) => (
                 <tr
-                  key={form.date}
+                  key={form.fecha_numero}
                   className="w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3">
-                    {formatDateToLocal(form.date)}
+                    {formatDate(form.fecha_numero)}
                   </td>
                   <td className="text-wrap px-3 py-3">
                     {form.motivo}

@@ -29,29 +29,19 @@ export async function authenticate(
     puntualidad:number,
     escrituras:number,
     otro:number,
-    fecha:string
+    fecha:number
   ) {
     try {
       await sql`
-INSERT INTO bank.income (created_at,id_user,id_client,asistencia,puntualidad,escrituras,otro,"date") 
+INSERT INTO bank.income (created_at,id_user,id_client,asistencia,puntualidad,escrituras,otro,fecha_numero) 
 VALUES (now(),${id_user},${id_client},${asistencia},${puntualidad},${escrituras},${otro},${fecha})
-ON CONFLICT ("date",id_client) DO UPDATE 
+ON CONFLICT (fecha_numero,id_client) DO UPDATE 
   SET created_at = excluded.created_at, 
       asistencia = excluded.asistencia,
       puntualidad = excluded.puntualidad,
       escrituras = excluded.escrituras,
       otro = excluded.otro
-      `;
-      console.log(`
-INSERT INTO bank.income (created_at,id_user,id_client,asistencia,puntualidad,escrituras,otro,"date") 
-VALUES (now(),${id_user},${id_client},${asistencia},${puntualidad},${escrituras},${otro},${fecha})
-ON CONFLICT ("date",id_client) DO UPDATE 
-  SET created_at = excluded.created_at, 
-      asistencia = excluded.asistencia,
-      puntualidad = excluded.puntualidad,
-      escrituras = excluded.escrituras,
-      otro = excluded.otro
-      `);
+      `;      
     } catch (error) {
       console.log(error);
       return {

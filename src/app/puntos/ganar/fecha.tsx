@@ -1,11 +1,11 @@
 'use client';
 
-import { FechaDB } from '@/app/lib/definitions';
-import { formatDateToLocal } from '@/app/lib/utils';
+import { fecha } from '@/app/lib/definitions';
+import { formatDate } from '@/app/lib/utils';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 
 
-export default function Fecha({ dates }: { dates: FechaDB[] }) {
+export default function Fecha({ fechas }: { fechas: fecha[] }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
@@ -38,9 +38,9 @@ export default function Fecha({ dates }: { dates: FechaDB[] }) {
                 </option>
 
                 {
-                    dates.map((date) => (
-                        <option value={formatDateToLocal(date.date.toDateString())} key={formatDateToLocal(date.date.toDateString())}>
-                            {formatDateToLocal(date.date.toDateString())}
+                    fechas.map((fecha) => (
+                        <option value={fecha.fecha_numero} key={fecha.fecha_numero}>
+                            {formatDate(fecha.fecha_numero)}
                         </option>
                     ))
                 }

@@ -1,10 +1,10 @@
-export type FechaDB = {
-    date: Date;
+export type fecha = {
+    fecha_numero: number;
     periodo: string;
 }
 
 export type Attendance = {
-    date: string;
+    fecha_numero: number;
     id_client: number;
     apellidos_nombres: string;
     asistencia: number;
@@ -15,7 +15,7 @@ export type Attendance = {
 }
 
 export type Balance = {
-    date: string,
+    fecha_numero: number,
     tag: string,
     apellidos_nombres: string;
     motivo: string;
@@ -24,6 +24,7 @@ export type Balance = {
 
 export type User = {
     id: string;
+    id_user: number;
     name: string;
     password: string;
     role: string;
