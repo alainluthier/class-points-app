@@ -3,8 +3,8 @@ import { Attendance, Balance, FechaDB } from './definitions';
 import { unstable_noStore as noStore } from 'next/cache';
 
 function convert(fec: Date){
-  const fecha=new Date(fec.getFullYear(),fec.getMonth(),fec.getDate(),0,0,0,0)
-  return(new Date(fecha.toLocaleDateString('en',{timeZone:'America/La_Paz'})))
+  const fecha=new Date(fec.getFullYear(),fec.getMonth(),fec.getDate()+1,0,0,0,0)
+  return fecha
 }
 export async function fetchDates(){
     noStore();
