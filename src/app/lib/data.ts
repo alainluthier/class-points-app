@@ -6,11 +6,13 @@ export async function fetchDates(){
     noStore();
     try{
         const data = await sql<FechaDB> `
-            select * from bank.dates 
-            --where date <= date(now())
-            order by date desc
+select date("date") "date", periodo
+from bank.dates 
+--where date <= date(now())
+order by date desc
         `;
         const listDates = data.rows;
+        //console.log(listDates);
         return listDates;
     } catch(error){
         console.error('Database error:',error);
