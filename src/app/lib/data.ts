@@ -12,7 +12,7 @@ from bank.dates
 order by date desc
         `;
         const listDates = data.rows;
-        //console.log(listDates);
+        console.log(listDates);
         return listDates;
     } catch(error){
         console.error('Database error:',error);
