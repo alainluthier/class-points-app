@@ -12,7 +12,6 @@ export default async function Page(props: {
 }) {
     const listDates = await fetchDates();
     const searchParams = await props.searchParams;
-    const hoy = new Date()
     const fecha = searchParams?.fecha || formatDateToLocal(listDates[0].date.toISOString());
     const barrio='16 de Julio'
     return (
