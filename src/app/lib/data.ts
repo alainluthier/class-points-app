@@ -6,7 +6,7 @@ export async function fetchDates(){
     noStore();
     try{
         const data = await sql<FechaDB> `
-select date("date") "date", periodo
+select "date" AT TIME ZONE 'America/La_Paz' "date", periodo
 from bank.dates 
 --where date <= date(now())
 order by date desc
