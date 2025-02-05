@@ -54,5 +54,5 @@ ON CONFLICT (fecha_numero,id_client) DO UPDATE
     }
   }
   export async function signout(){
-    await signOut();
+    await signOut({redirectTo: '/'});
   }
