@@ -1,7 +1,7 @@
 import { fetchAttendance } from '@/app/lib/data';
 import React from 'react';
 import Asistencia from './asistencia';
-export default async function InvoicesTable({
+export default async function GanarTable({
   barrio,
   fecha,
   id_user,

@@ -1,7 +1,7 @@
-import { lusitana } from "../ui/fonts";
+import { lusitana } from "../../ui/fonts";
 import { Suspense } from 'react';
-import { CardsSkeleton } from "../ui/skeletons";
-import CardWrapper from "../ui/puntos/cards";
+import { CardsSkeleton } from "../../ui/skeletons";
+import CardWrapper from "../../ui/puntos/cards";
 export default async function Page() {
     return (
         <main>

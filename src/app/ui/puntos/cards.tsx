@@ -15,9 +15,8 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
-  const {
+  const {numberOfTeachers,
     numberOfStudents,
-    numberOfTeachers,
     totalIncomes,
     totalExpenses,
   } = await fetchCardData()
@@ -25,9 +24,9 @@ export default async function CardWrapper() {
     <>
       {/* NOTE: comment in this code when you get to this point in the course */}
 
-      <Card title="Maestros" value={numberOfStudents} 
+      <Card title="Maestros" value={numberOfTeachers} 
       type="teachers" />
-      <Card title="Estudiantes" value={numberOfTeachers} 
+      <Card title="Estudiantes" value={numberOfStudents} 
       type="students" />
       <Card title="Puntos Ganados" value={totalIncomes} 
       type="incomes" />

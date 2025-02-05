@@ -11,6 +11,8 @@ export type Attendance = {
     puntualidad: number;
     escrituras: number;
     otro: number;
+    lectura: number;
+    estrella:number;
     total:number;
 }
 

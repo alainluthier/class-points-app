@@ -25,10 +25,10 @@ export async function fetchCardData() {
       const totalMaestros = sql`
       SELECT COUNT(*) FROM bank.user where role='Maestro'`;
       const totalAlumnos = sql`
-      SELECT COUNT(*) FROM bank.client`;
+      SELECT COUNT(*) FROM bank.client where seminario=1`;
       const totalPuntos = sql`
       SELECT
-      SUM(asistencia+puntualidad+escrituras+otro) total
+      SUM(asistencia+puntualidad+escrituras+otro+lectura) total
       FROM bank.income`;
        const totalPuntosGastados = sql`
        SELECT
@@ -59,9 +59,9 @@ export async function fetchCardData() {
     }
   }
 
-  export async function fetchAttendance(
+  export async function fetchEstrellitas(
     barrio: string,
-    fecha: number,
+    fecha: number
   ) {
     noStore();
     try {
@@ -73,15 +73,51 @@ coalesce(asistencia,0) asistencia,
 coalesce(puntualidad,0) puntualidad,
 coalesce(escrituras,0) escrituras,
 coalesce(otro,0) otro,
-coalesce(asistencia+puntualidad+escrituras+otro,0) total
+coalesce(lectura,0) lectura,
+coalesce(estrella,0) estrella,
+coalesce(asistencia+puntualidad+escrituras+otro+lectura,0) total
 from 
 (select da.fecha_numero, cl.id,cl.last_name,cl.name, cl.ward
+from (select ${fecha}::int4 fecha_numero) da,
+bank.client cl) dacl 
+left join bank.income asi on dacl.fecha_numero = asi.fecha_numero
+and dacl."id" = asi.id_client 
+where dacl.ward = ${barrio}
+order by last_name`;
+      return attendance.rows;
+    } catch (error) {
+      console.error('Database Error:', error);
+      throw new Error('Failed to fetch Attendance.');
+    }
+  }
+
+
+  export async function fetchAttendance(
+    barrio: string,
+    fecha: number
+  ) {
+    noStore();
+    try {
+      const attendance = await sql<Attendance>`
+select dacl.fecha_numero,
+dacl.id id_client,
+concat(last_name,' ',name) apellidos_nombres,
+coalesce(asistencia,0) asistencia,
+coalesce(puntualidad,0) puntualidad,
+coalesce(escrituras,0) escrituras,
+coalesce(otro,0) otro,
+coalesce(lectura,0) lectura,
+coalesce(estrella,0) estrella,
+coalesce(asistencia+puntualidad+escrituras+otro+lectura,0) total
+from 
+(select da.fecha_numero, cl.id,cl.last_name,cl.name, cl.ward, cl.seminario
 from bank.fecha da,
 bank.client cl) dacl 
 left join bank.income asi on dacl.fecha_numero = asi.fecha_numero
 and dacl."id" = asi.id_client 
 where dacl.ward = ${barrio}
 and dacl.fecha_numero = ${fecha}
+and seminario = 1
 order by last_name`;
       return attendance.rows;
     } catch (error) {
@@ -104,7 +140,7 @@ select * from
 c.tag,
 concat(last_name,' ',name) apellidos_nombres,
 concat('Seminarios A:',coalesce(asistencia,0),', P:',coalesce(puntualidad,0),', E:',coalesce(escrituras,0)) motivo,
-coalesce(asistencia+puntualidad+escrituras+otro,0) monto
+coalesce(asistencia+puntualidad+escrituras+otro+lectura,0) monto
 from bank.income i inner join bank.client c on i.id_client = c.id
 union 
 select
@@ -125,7 +161,7 @@ select sum(abc.monto) saldo from
 c.tag,
 concat(last_name,' ',name) apellidos_nombres,
 concat('Seminarios A:',coalesce(asistencia,0),', P:',coalesce(puntualidad,0),', E:',coalesce(escrituras,0)) motivo,
-coalesce(asistencia+puntualidad+escrituras+otro,0) monto
+coalesce(asistencia+puntualidad+escrituras+otro+lectura,0) monto
 from bank.income i inner join bank.client c on i.id_client = c.id
 union 
 select
@@ -158,7 +194,7 @@ const saldoNumero = Number((await saldo).rows[0].saldo)
 c.tag,
 concat(last_name,' ',name) apellidos_nombres,
 concat('Seminarios A:',coalesce(asistencia,0),', P:',coalesce(puntualidad,0),', E:',coalesce(escrituras,0)) motivo,
-coalesce(asistencia+puntualidad+escrituras+otro,0) monto
+coalesce(asistencia+puntualidad+escrituras+otro+lectura,0) monto
 from bank.income i inner join bank.client c on i.id_client = c.id
 union 
 select
@@ -182,7 +218,8 @@ order by fecha_numero desc
 
   export async function getUser(name: string): Promise<User | undefined> {
     try {
-      const user = await sql<User>`SELECT * FROM bank.users WHERE "user"=${name}`;
+      const user = await sql<User>`SELECT "id", "id" as id_user,"name","password","role",ward
+FROM bank."user" where "name" = ${name}`;
       return user.rows[0];
     } catch (error) {
       console.error('Failed to fetch user:', error);

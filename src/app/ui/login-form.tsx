@@ -6,17 +6,18 @@ import {
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { useFormStatus } from 'react-dom';
 import { Button } from './button';
 import Breadcrumbs from './breadcrumbs';
  import { authenticate } from '@/app/lib/actions';
 import { useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function LoginForm() {
-  const [errorMessage, dispatch] = useActionState(authenticate, undefined);
+  const searchParams = useSearchParams();
+  const [errorMessage, formAction,isPending] = useActionState(authenticate, undefined);
   return (
     <form 
-    action={dispatch} 
+    action={formAction} 
     className="space-y-3">
       <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <Breadcrumbs
@@ -69,7 +70,10 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <LoginButton />
+        <input type="hidden" name="redirectTo" value={searchParams.get('callbackUrl') || '/puntos'} />
+        <Button className="mt-4 w-full" aria-disabled={isPending}>
+          Iniciar Sesión <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+        </Button>
         <div
           className="flex h-8 items-end space-x-1"
           aria-live="polite"
@@ -82,16 +86,9 @@ export default function LoginForm() {
             </>
           )}
         </div>
+        
       </div>
     </form>
-  );
-}
-
-function LoginButton() {
-  const { pending } = useFormStatus();
-  return (
-    <Button className="mt-4 w-full" aria-disabled={pending}>
-      Iniciar Sesión <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    </Button>
+    
   );
 }

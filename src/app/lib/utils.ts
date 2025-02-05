@@ -54,6 +54,7 @@ export const formatDate = (
         yy: fecha.getFullYear().toString().slice(-2),
         yyyy: fecha.getFullYear()
     }
-
-    return Number(map.yyyy+map.mm+map.dd)
+    const mes=map.mm<10?'0'+String(map.mm):String(map.mm)
+    const dia=map.dd<10?'0'+String(map.dd):String(map.dd)
+    return Number(String(map.yyyy)+mes+dia)
 }

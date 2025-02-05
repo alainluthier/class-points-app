@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import LoginForm from "../ui/login-form";
 import AppLogo from "../ui/logo";
 
@@ -10,7 +11,9 @@ export default function LoginPage() {
             <AppLogo />
           </div>
         </div>
-        <LoginForm />
+        <Suspense>
+          <LoginForm />
+        </Suspense>
       </div>
     </main>
   );

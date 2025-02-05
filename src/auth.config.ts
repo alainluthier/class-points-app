@@ -7,6 +7,7 @@ declare module "next-auth" {
     user: {
       id_user: number,
       ward: string,
+      role: string,
     } & DefaultSession["user"]
   }
 }
@@ -31,7 +32,7 @@ export const authConfig = {
     },
     async jwt({ token, user }) {
       if (user) {
-        if(user.email!=null){
+        if(user.name!=null){
           token.user = await getUser(user.name|| '')
         }else{
           token.user=user;
@@ -40,22 +41,15 @@ export const authConfig = {
       }
       return token;
     },
-    session(sessionArgs) {
+    async session({session,token}) {
       // token only exists when the strategy is jwt and not database, so sessionArgs here will be { session, token }
       // with a database strategy it would be { session, user } 
-      if ("token" in sessionArgs) {
-         const session = sessionArgs.session;
-         if ("user" in sessionArgs.token) {
-           const tokenUser = sessionArgs.token.user as User;
-           if (tokenUser.id) {
-             session.user.id = tokenUser.id;
-             session.user.id_user = tokenUser.id_user;
-             session.user.ward = tokenUser.ward;
-             return session;
-           }
-         }
-      }
-      return sessionArgs.session;
+      const tokenUser = token.user as User;
+      session.user.id = tokenUser.id;
+      session.user.id_user = tokenUser.id_user;
+      session.user.ward = tokenUser.ward;
+      session.user.role = tokenUser.role;
+      return session;
      },
   },
   providers: [], // Add providers with an empty array for now
